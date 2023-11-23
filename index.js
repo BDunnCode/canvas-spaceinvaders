@@ -61,8 +61,34 @@ class Player {
   }
 }
 
+class Projectile {
+  constructor({position, velocity}){
+    this.position = position
+    this.velocity = velocity
+    
+    this.radius = 3
+  }
+
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    c.fillStyle = 'red'
+    c.fill()
+    c.closePath()
+  }
+
+  update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+  }
+}
+
 const player = new Player()
-const keys = {
+const projectiles = []
+
+
+  const keys = {
   a: {
     pressed: false
   },
@@ -76,6 +102,17 @@ function animate() {
   c.fillStyle = 'black'
   c.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
+  projectiles.forEach((projectile, index) => {
+    if (projectile.position.y + projectile.radius <= 0) {
+      setTimeout(() => {
+        projectiles.splice(index, 1)
+      }, 0) 
+      projectiles.splice(index, 1)
+    } else {
+      projectile.update()
+    }
+    projectile.update()
+  })
 
   if (keys.a.pressed && player.position.x > 0) {
     player.velocity.x = -7
@@ -103,6 +140,17 @@ addEventListener('keydown', ({ key }) => {
       break
     case ' ':
       console.log('space/shoot')
+      projectiles.push(new Projectile({
+        position: {
+          x: player.position.x + player.width / 2,
+          y: player.position.y,
+        },
+        velocity: {
+          x: 0,
+          y: -10
+        }
+      }))
+      console.log(projectiles)
       break
   }
 })
