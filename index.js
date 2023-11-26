@@ -1,7 +1,9 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-canvas.width = innerWidth
-canvas.height = innerHeight
+const scoreElement = document.querySelector('#scoreElement')
+
+canvas.width = 1024
+canvas.height = 576
 
 class Player {
   constructor() {
@@ -269,6 +271,7 @@ let game = {
   over: false,
   active: true
 }
+let score = 0
 
 
 for (let i = 0; i < 100; i++) {
@@ -418,7 +421,8 @@ function animate() {
               
               // remove invader and projectile
               if (invaderFound && projectileFound) {
-
+                score+= 100
+                scoreElement.innerText = ' ' + score
                 createParticles({
                   object: invader,
                   fades: true
